@@ -67,8 +67,8 @@ public class Erasurator {
 
         globalParameters.clear();
 
+        parseTypeParameters(result);
         if (result.getTypeParameters() != null) {
-            parseTypeParameters(result);
             result.setTypeParameters(null);
         }
         processMembers(result);
@@ -81,8 +81,8 @@ public class Erasurator {
 
         globalParameters.clear();
 
+        parseTypeParameters(result);
         if (result.getTypeParameters() != null) {
-            parseTypeParameters(result);
             result.setTypeParameters(null);
         }
         processDeclaredMembers(result);
@@ -107,6 +107,8 @@ public class Erasurator {
         while (m.find()) {
             String param = m.group();
             if (globalParameters.containsKey(param)) {
+                System.out
+                        .println("Erasurator: Found global match for " + param + " -> " + globalParameters.get(param));
                 newS = m.replaceFirst(globalParameters.get(param));
                 m = replaceParamUsage.matcher(newS);
                 continue;
