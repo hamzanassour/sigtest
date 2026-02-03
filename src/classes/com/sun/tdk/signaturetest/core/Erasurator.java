@@ -130,6 +130,25 @@ public class Erasurator {
         if (classDescr.getTypeParameters() != null) {
             parseTypeParameters(classDescr, globalParameters);
         }
+        if (classDescr.getSuperClass() != null) {
+            parseSuperTypeParameters(classDescr.getSuperClass());
+        }
+        if (classDescr.getInterfaces() != null) {
+            for (SuperInterface superInterface : classDescr.getInterfaces()) {
+                parseSuperTypeParameters(superInterface);
+            }
+        }
+    }
+
+    private void parseSuperTypeParameters(MemberDescription member) {
+        if (member.getTypeParameters() == null) {
+            return;
+        }
+        List<String> params = splitParameters(member.getTypeParameters());
+        for (int i = 0; i < params.size(); i++) {
+            String key = "{" + member.getQualifiedName() + "%" + i + "}";
+            globalParameters.put(key, maskDollar(params.get(i)));
+        }
     }
 
     private static void parseTypeParameters(MemberDescription member, Map<String, String> parameters) {
